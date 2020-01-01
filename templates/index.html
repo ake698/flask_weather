@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>潮州空气质量指数AQI_PM2.5月统计历史数据_中国空气质量在线监测分析平台历史数据</title>
+<meta http-equiv="refresh" content="300">
+<link rel="shortcut icon" href="/static/logo.jpg">
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css?v=1.1" type="text/css">
+</head>
+<body>
+
+<!-- Fixed navbar -->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation" >
+  <div class="container" style="padding:0px 0px 0 10px">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/historydata/" style="padding:0px"><img src="/static/logo.jpg" width="148px" height="50px" /></a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="/index/" >空气质量</a></li>
+        <!-- <li><a href="weather.php" >历史天气</a></li> -->
+        <li><a href="#" >数据统计</a></li>
+        <li><a href="#" >设备管理</a></li>
+        <li><a href="#" >排污费管理</a></li>
+        <li><a href="/forecast/" >数据预测</a></li>
+
+      </ul>
+        <ul class="nav navbar-nav" style="float: right;">
+            {% if request.session.username %}
+            <li><a href="#" >你好，{{ request.session.username }}</a></li>
+            <li><a href="/logout/" >注销</a></li>
+                {% else %}
+             <li><a href="/login/" >登录</a></li>
+                <li><a href="register/">注册</a></li>
+            {% endif %}
+
+            <li><a href="#">关于</a></li>
+        </ul>
+
+
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+
+<h2 id="title">潮州空气质量指数月统计历史数据</h2>
+<div class="container">
+  <div class="row">
+  <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12" style="padding:0 5px">
+  <table width="100%" class="table table-condensed table-bordered table-striped table-hover table-responsive" style="margin-bottom:5px">
+      <tr height=38px>
+        <th style="background:#d9edf7">日期</th>
+        <th style="background:#d9edf7">AQI</th>
+        <th style="background:#d9edf7" width="80px" >质量等级</th>
+        <th style="background:#d9edf7">PM2.5</th>
+        <th style="background:#d9edf7">PM10</th>
+        <th style="background:#d9edf7" class="hidden-xs">SO2</th>
+        <th style="background:#d9edf7" class="hidden-xs">CO</th>
+        <th style="background:#d9edf7" class="hidden-xs">NO2</th>
+        <th style="background:#d9edf7" class="hidden-xs">O3</th>
+      </tr>
+      <tbody id="tbodydata">
+{#      {% for i in airs %}#}
+{#        <tr style="text-align: center">#}
+{#            <td>{{ i.date | date:"Y-m-d" }}</td>#}
+{#            <td>{{ i.AQI }}</td>#}
+{#            <td>{{ i.qualityLevel }}</td>#}
+{#            <td>{{ i.PM25 }}</td>#}
+{#            <td>{{ i.PM10 }}</td>#}
+{#            <td>{{ i.SO2 }}</td>#}
+{#            <td>{{ i.CO }}</td>#}
+{#            <td>{{ i.NO2 }}</td>#}
+{#            <td>{{ i.O3 }}</td>#}
+{#        </tr>#}
+{#      {% endfor %}#}
+      </tbody>
+  </table>
+  <span style="color:gray;font-size:12px">数值单位：μg/m3(CO为mg/m3)<br/></span>
+  <span style="color:gray;font-size:12px">每月AQI数据和PM2.5浓度数据是本站根据当天环保总站每小时数据计算求平均的结果，存在丢数据场景，仅供参考。如果数据无法正常显示，请尝试使用<a href='https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=0&rsv_idx=1&tn=baidu&wd=chrome&rsv_pq=b4d98b8400009b26&rsv_t=f897l1tNmVRDDbamciZKvfBjKCHNJJYE3cj9vlWycNYtZeFznk5l8XCwW%2FM&rqlang=cn&rsv_enter=1&rsv_sug3=2&rsv_sug1=2&rsv_sug7=100' target="_blank" />chrome</a>浏览器。</span>
+  <div class="panel panel-info">
+	<div style="padding-right:20px;">
+	  <div id="container" style="min-width:200px;height:380px;"></div>
+	  <div id="containerlevel" style="min-width:200px;height:380px;"></div>
+	</div>
+  </div>
+  </div>
+  <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12" style="padding:0 5px" >
+      <div class="panel panel-info">
+      <div class="panel-heading">
+        <h3 class="panel-title" style="text-align:center">潮州月统计数据</h3>
+      </div>
+      <div >
+        <div id="piecontainer" style="height:200px;"></div>
+      </div>
+     </div>
+
+     <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title" style="text-align:center">潮州其他月份历史数据</h3>
+        </div>
+        <div style="padding:10px 10px 10px 10px">
+           <ul class="unstyled1">
+
+
+                        </ul>
+        </div>
+     </div>
+
+
+
+  </div>
+  </div>
+</div>
+<br/>
+<hr style="margin-bottom:5px"/>
+
+<script type="text/javascript" src="/static/js/jquery.min.js?v=1.8"></script>
+<script type="text/javascript" src="/static/js/highcharts.js"></script>
+<script type="text/javascript" src="/static/js/highcharts-more.js"></script>
+<script src="http://s1.bdstatic.com/r/www/cache/ecom/esl/2-1-4/esl.js"></script>
+<script type="text/javascript">
+
+var lastyear = 0;
+var lastmonth = 0;
+var level1 = 0;
+var level2 = 0;
+var level3 = 0;
+var level4 = 0;
+var maxAQI = -1;
+var minAQI = 1000;
+var AQI = [];
+
+$(document).ready(function () {
+    $.ajax({
+        url:'/getlast/',
+        type:"get",
+        success:function (data) {
+            lastyear = data.year;
+            lastmonth = data.month;
+            historylistShow();
+        }
+    });
+
+});
+//获取url中的参数
+function getUrlParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+    if (r != null) return unescape(r[2]); return null; //返回参数值
+}
+
+function resetData() {
+    level1 = 0;
+    level2 = 0;
+    level3 = 0;
+    level4 = 0;
+    maxAQI = -1;
+    minAQI = 1000;
+    AQI.length = 0;
+}
+
+function historylistShow() {
+    month = 1;
+    for(var i=2014;i<=lastyear;i++){
+        while (month<=12){
+            if(i == lastyear && month > lastmonth)break;
+            temp = month;
+            if(month<10)temp = "0"+month.toString();
+            $(".unstyled1").append('<li><a href="#" onclick="showInfo('+i+','+month+')" >'+i+'年'+temp+'月'+'</a></li>');
+            month++;
+        }
+        month = 1;
+    }
+    year = getUrlParam("year");
+    month = getUrlParam("month");
+    if(year!=null && year!="" && month!="" && month != null){
+        showInfo(year,month);
+    }else{
+        showInfo(2019,10);
+    }
+
+}
+
+function tableInsert(models){
+    $("#tbodydata").append(
+        "<tr style='text-align: center'>" +
+            "<td>"+models.date+"</td>"+
+            "<td>"+models.AQI+"</td>"+
+            "<td>"+models.qualityLevel+"</td>"+
+            "<td>"+models.PM25+"</td>"+
+            "<td>"+models.PM10+"</td>"+
+            "<td>"+models.SO2+"</td>"+
+            "<td>"+models.CO+"</td>"+
+            "<td>"+models.NO2+"</td>"+
+            "<td>"+models.O3+"</td>"
+        +"</tr>"
+    )
+}
+
+function showInfo(year,month){
+     $("#tbodydata").empty();
+     resetData();
+    $.ajax({
+        url:"/getinfo/"+year+"/"+month+"/",
+        type:"get",
+        success:function (data) {
+            for(var i=0;i<data.length;i++){
+                models = data[i].fields;
+                tableInsert(models);
+                aqi = models.AQI;
+                if(aqi > maxAQI)maxAQI = aqi;
+                if(aqi < minAQI)minAQI = aqi;
+                AQI.push(aqi);
+             if(models.qualityLevel == "优"){
+                 level1 = level1 + 1;
+             }else if(models.qualityLevel == "良"){
+                 level2 = level2 + 1;
+            }else if(models.qualityLevel == "轻度污染"){
+                 level3 = level3 + 1;
+            }else if(models.qualityLevel == "中度污染"){
+                 level4 = level4 + 1;
+            }
+            }
+            pieShow();
+            contianerShow()
+        }
+    })
+}
+
+function pieShow(){
+    $("#piecontainer").empty();
+    var chart = {
+       plotBackgroundColor: null,
+       plotBorderWidth: null,
+       plotShadow: false
+       };
+    var title = {
+          text: ''
+       };
+    var tooltip = {
+      pointFormat: '{series.name}: <b>{point.y}</b>天({point.percentage:.1f}%)'
+   };
+    var plotOptions = {
+      pie: {
+         allowPointSelect: true,
+         cursor: 'pointer',
+         dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}%</b>: {point.percentage:.1f} %',
+            style: {
+               color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+            }
+         }
+      }
+   };
+
+    var piedata = [
+        ["优",level1],
+        ["良",level2],
+        ["轻度污染",level3],
+        ["中度污染",level4]
+    ];
+
+    piedata = JSON.stringify(piedata);
+    piedata = JSON.parse(piedata);
+
+
+    console.log(piedata);
+
+    var series=[{
+            type: 'pie',
+            name: '天数',
+            data:piedata
+        }];
+
+
+    var json = {};
+   json.chart = chart;
+   json.title = title;
+   json.tooltip = tooltip;
+   json.series = series;
+   json.plotOptions = plotOptions;
+   $('#piecontainer').highcharts(json);
+}
+
+function contianerShow(){
+    $("#container").empty();
+	title = {
+		text: '本月AQI指数趋势图'
+	};
+	subtitle = {
+		text: '本月AQI最大值为：'+maxAQI+"，本月AQI最小值为："+minAQI
+	};
+	yAxis = {
+		title: {
+			text: 'AQI指数'
+		}
+	};
+	legend = {
+		layout: 'vertical',
+		align: 'right',
+		verticalAlign: 'middle'
+	};
+	plotOptions={
+		series: {
+			label: {
+				connectorAllowed: false
+			},
+			pointStart: 1
+		}
+	};
+	series = [{
+		name: 'AQI指数',
+		data: AQI,
+	}];
+	responsive={
+		rules: [{
+			condition: {
+				maxWidth: 500
+			},
+			chartOptions: {
+				legend: {
+					layout: 'horizontal',
+					align: 'center',
+					verticalAlign: 'bottom'
+				}
+			}
+		}]
+	};
+    var json = {};
+   json.title = title;
+   json.subtitle = subtitle;
+   json.yAxis = yAxis;
+   json.legend = legend;
+   json.plotOptions = plotOptions;
+   json.series = series;
+   json.responsive = responsive;
+   $('#container').highcharts(json);
+}
+
+
+
+
+</script>
+</body>
+</html>
