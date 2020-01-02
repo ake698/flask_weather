@@ -7,6 +7,7 @@
 import os
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
+
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
      # database
@@ -24,6 +25,8 @@ class Config(object):
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = Config.SQLALCHEMY_TRACK_MODIFICATIONS
+
+#app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
+#app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = Config.SQLALCHEMY_TRACK_MODIFICATIONS
+app.config.from_object(Config)
 db = SQLAlchemy(app)

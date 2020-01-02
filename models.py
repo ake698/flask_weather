@@ -21,6 +21,12 @@ class Airquality(db.Model):
 
     __tablename__ = "airquality"
 
+    def to_json(self):
+        return {
+		'date':self.date,'qualityLevel':self.qualityLevel,'AQI':self.AQI,'PM25':self.PM25,'PM10':self.PM10,
+		'SO2':self.SO2,'NO2':self.NO2,'CO':self.CO,'O3':self.O3
+	}
+
 
 if __name__ == '__main__':
     db.create_all()
