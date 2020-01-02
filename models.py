@@ -22,8 +22,9 @@ class Airquality(db.Model):
     __tablename__ = "airquality"
 
     def to_json(self):
+        date = "%s年%s月%s日"%(self.date.year,self.date.month,self.date.day)
         return {
-		'date':self.date,'qualityLevel':self.qualityLevel,'AQI':self.AQI,'PM25':self.PM25,'PM10':self.PM10,
+		'date':date,'qualityLevel':self.qualityLevel,'AQI':self.AQI,'PM25':self.PM25,'PM10':self.PM10,
 		'SO2':self.SO2,'NO2':self.NO2,'CO':self.CO,'O3':self.O3
 	}
 

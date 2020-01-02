@@ -4,7 +4,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>潮州空气质量指数AQI_PM2.5月统计历史数据_中国空气质量在线监测分析平台历史数据</title>
+<title>北京空气质量指数AQI_PM2.5月统计历史数据_中国空气质量在线监测分析平台历史数据</title>
 <meta http-equiv="refresh" content="300">
 <link rel="shortcut icon" href="/static/logo.jpg">
 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css" rel="stylesheet">
@@ -35,13 +35,13 @@
 
       </ul>
         <ul class="nav navbar-nav" style="float: right;">
-            {% if request.session.username %}
-            <li><a href="#" >你好，{{ request.session.username }}</a></li>
-            <li><a href="/logout/" >注销</a></li>
-                {% else %}
-             <li><a href="/login/" >登录</a></li>
-                <li><a href="register/">注册</a></li>
-            {% endif %}
+{#            {% if request.session.username %}#}
+{#            <li><a href="#" >你好，{{ request.session.username }}</a></li>#}
+{#            <li><a href="/logout/" >注销</a></li>#}
+{#                {% else %}#}
+{#             <li><a href="/login/" >登录</a></li>#}
+{#                <li><a href="register/">注册</a></li>#}
+{#            {% endif %}#}
 
             <li><a href="#">关于</a></li>
         </ul>
@@ -52,7 +52,7 @@
 </div>
 
 
-<h2 id="title">潮州空气质量指数月统计历史数据</h2>
+<h2 id="title">北京空气质量指数月统计历史数据</h2>
 <div class="container">
   <div class="row">
   <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12" style="padding:0 5px">
@@ -96,7 +96,7 @@
   <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12" style="padding:0 5px" >
       <div class="panel panel-info">
       <div class="panel-heading">
-        <h3 class="panel-title" style="text-align:center">潮州月统计数据</h3>
+        <h3 class="panel-title" style="text-align:center">北京月统计数据</h3>
       </div>
       <div >
         <div id="piecontainer" style="height:200px;"></div>
@@ -105,7 +105,7 @@
 
      <div class="panel panel-info">
         <div class="panel-heading">
-          <h3 class="panel-title" style="text-align:center">潮州其他月份历史数据</h3>
+          <h3 class="panel-title" style="text-align:center">北京其他月份历史数据</h3>
         </div>
         <div style="padding:10px 10px 10px 10px">
            <ul class="unstyled1">
@@ -190,7 +190,10 @@ function historylistShow() {
 
 }
 
+
+
 function tableInsert(models){
+
     $("#tbodydata").append(
         "<tr style='text-align: center'>" +
             "<td>"+models.date+"</td>"+
@@ -213,8 +216,9 @@ function showInfo(year,month){
         url:"/getinfo/"+year+"/"+month+"/",
         type:"get",
         success:function (data) {
+            data = data.result;
             for(var i=0;i<data.length;i++){
-                models = data[i].fields;
+                models = data[i];
                 tableInsert(models);
                 aqi = models.AQI;
                 if(aqi > maxAQI)maxAQI = aqi;

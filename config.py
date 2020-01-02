@@ -22,7 +22,7 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://{}:{}@{}:{}/{}?charset=utf8'.\
     format(username, password, host, port, database)
     SQLALCHEMY_TRACK_MODIFICATIONS = True
-
+    JSON_AS_ASCII = False
 
 app = Flask(__name__)
 

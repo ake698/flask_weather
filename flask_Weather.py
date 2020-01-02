@@ -9,22 +9,34 @@ db.init_app(app)
 
 
 @app.route('/')
-def hello_world():
-    return 'Hello World!'
+def index():
+    return render_template("index.html")
+
+@app.route("/getlast/")
+def getLast():
+    air = Airquality.query.order_by(Airquality.date.desc()).first().date
+    year = air.year
+    month = air.month
+    # return jsonify({"date":air.date})
+    return jsonify({"year":year,"month":month})
+
+
 
 
 @app.route('/getinfo/<year>/<month>/')
 def getInfoByYearMonth(year,month):
-    # dateTime_p = datetime.datetime.strptime(year-month, '%Y-%m')
-    # airs = Airquality.objects.filter(date__year=year).filter(date__month=month)
-    # json_data = serializers.serialize('json',airs,ensure_ascii=False)
-    # return HttpResponse(json_data, content_type="application/json,charset=utf-8")
     airs = Airquality.query.filter(and_(extract('month',Airquality.date) == month,
-					extract('year',Airquality.date) == year)
-					).all()
+					extract('year',Airquality.date) == year)).all()
     print(airs)
     return jsonify(
        result = [i.to_json() for i in airs])
+
+
+@app.route("/admin/users/")
+def userManager():
+    return render_template("bk/index.html")
+
+
 
 
 @app.route("/login/")
@@ -44,4 +56,4 @@ def register():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0",debug=True)
