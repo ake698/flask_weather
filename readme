@@ -1,5 +1,7 @@
 pip install flask
+pip install flask_admin
 pip install flask-sqlalchemy
 pip install mysql-connector
 pip install mysql
 pip install pymysql
+pip install flask-babelex

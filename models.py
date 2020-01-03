@@ -28,6 +28,18 @@ class Airquality(db.Model):
 		'SO2':self.SO2,'NO2':self.NO2,'CO':self.CO,'O3':self.O3
 	}
 
+    def __repr__(self):
+        return "%s"%self.date
+
+
+class UserInfo(db.Model):
+    id = db.Column(db.Integer,primary_key=True,autoincrement=True)
+    username = db.Column(db.String(16))
+    password = db.Column(db.String(16))
+
+    def __repr__(self):
+        return self.username
+
 
 if __name__ == '__main__':
     db.create_all()

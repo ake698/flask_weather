@@ -71,18 +71,29 @@ $("form").submit(function(e){
 	event.preventDefault();
 	  username = $("input[name='username']").val().trim();
 	  passwd = $("input[name='password']").val().trim();
+    if(username.length<4){
+        alert("账号长度不能小于4");
+        return;
     }
+    if(passwd.length<6){
+        alert("密码长度不能小于6");
+        return;
+    }
+
     if(username!="" && passwd !="") {
         $.post("/register/", {
             username: username,
             password: passwd,
         }, function (data) {
+            data = data.code;
             if (data == "1") {
                 alert("该账户已存在!")
             } else if (data == "0"){
                 alert("注册成功，请前往登陆！");
                 window.location.href = "/login/"
-		}
+		}else{
+                alert("没有权限注册！");
+            }
         })
     }else{
         alert("请输入账号密码！")

@@ -7,6 +7,8 @@
 import os
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
+from flask_babelex import Babel
+
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
@@ -23,10 +25,16 @@ class Config(object):
     format(username, password, host, port, database)
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     JSON_AS_ASCII = False
+    FLASK_ADMIN_SWATCH = 'cerulean'
+    SECRET_KEY = "fadsfhasdkjfj"
+    BABEL_DEFAULT_LOCALE = "zh_CN"
 
 app = Flask(__name__)
+# admin = Admin(app,name='flask_Weather',template_mode='bootstrap3')
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
-#app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = Config.SQLALCHEMY_TRACK_MODIFICATIONS
 app.config.from_object(Config)
+babel = Babel(app)
 db = SQLAlchemy(app)
+
+adminUser = "admin"
+adminPassword = "123456"
