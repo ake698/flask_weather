@@ -1,9 +1,10 @@
-from flask import Flask,jsonify,render_template,request,redirect,url_for,session
+from flask import jsonify,render_template,request,redirect,session
 from sqlalchemy import extract,and_
 from config import db,app,adminUser,adminPassword
 from models import Airquality,UserInfo
-from flask_admin import Admin, AdminIndexView
+from flask_admin import Admin
 from admin import Airquality_Plus,UserInfo_Plus,Amin_view
+
 admin = Admin(app,name=u'后台管理',template_mode='bootstrap3')
 
 admin.add_view(Airquality_Plus(session=db.session,name=u"空气质量"))
@@ -66,8 +67,8 @@ def login():
         if username == adminUser and password == adminPassword:
             session["username"] = "admin"
             return jsonify({"code":0})
-        user = UserInfo.query.filter(UserInfo.username==username,UserInfo.password==password).first()
-        if user:
+        user = UserInfo.query.filter(UserInfo.username == username).first()
+        if user.checkPassword(password):
             session["username"] = username
             return jsonify({"code":0})
 
@@ -88,6 +89,7 @@ def register():
         if len(users) > 0:
             return jsonify({"code":1})
         user = UserInfo(username=username,password=password)
+        user.changePassword()
         db.session.add(user)
         db.session.commit()
         return jsonify({"code":0})
@@ -98,5 +100,20 @@ def logout():
     session.clear()
     return redirect("/login/")
 
+
+def encrypPassword(self,password):
+    key = hashlib.md5()
+    key.update(password.encode(encoding="utf-8"))
+    return key.hexdigest()
+    # return key.update(password.encode("utf-8")).hexdigest()
+
+
+def checkPassword(self,password):
+    key = hashlib.md5()
+    if self.password==self.encrypPassword(password):
+        return True
+    else:
+        return False
+
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",debug=True)
+    app.run()

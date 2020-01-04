@@ -5,7 +5,7 @@
 # @File    : db.py
 
 from config import db
-
+import hashlib
 
 class Airquality(db.Model):
     id = db.Column(db.Integer,primary_key=True,autoincrement=True)
@@ -35,10 +35,30 @@ class Airquality(db.Model):
 class UserInfo(db.Model):
     id = db.Column(db.Integer,primary_key=True,autoincrement=True)
     username = db.Column(db.String(16))
-    password = db.Column(db.String(16))
+    password = db.Column(db.String(100))
 
     def __repr__(self):
         return self.username
+
+
+    def encrypPassword(self):
+        key = hashlib.md5()
+        key.update(self.password.encode(encoding="utf-8"))
+        return key.hexdigest()
+        # return key.update(password.encode("utf-8")).hexdigest()
+
+    def changePassword(self):
+        encrypPassword = self.encrypPassword()
+        self.password = encrypPassword
+
+
+    def checkPassword(self,password):
+        key = hashlib.md5()
+        key.update(password.encode(encoding="utf-8"))
+        if self.password==key.hexdigest():
+            return True
+        else:
+            return False
 
 
 if __name__ == '__main__':
